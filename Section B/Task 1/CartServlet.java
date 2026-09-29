@@ -21,9 +21,6 @@ public class CartServlet extends HttpServlet {
 
         ArrayList<String> cart = (ArrayList<String>) session.getAttribute("cart");
 
--->(Session ke andar "cart" naam se jo data rakha hai, wo mujhe do.
-    Lekin getAttribute() normally Object return karta hai. Hume ArrayList<String> chahiye, isliye:)
-
 
         if (cart == null) {
             cart = new ArrayList<>();
