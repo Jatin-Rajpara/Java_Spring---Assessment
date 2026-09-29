@@ -1,0 +1,7 @@
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    restaurant_name VARCHAR(100),
+    total_amount DOUBLE,
+    status VARCHAR(20)
+);
