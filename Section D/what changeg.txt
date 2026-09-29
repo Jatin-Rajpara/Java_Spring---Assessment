@@ -1,0 +1,4 @@
+I added empty-list handling to show a message when no menu items are available.
+I used @RequestParam properly for POST values like item name, price, and available.
+I added error handling for database insert problems and kept SQL parameters safe using ?.
+These changes make the code safer and handle common errors properly.
