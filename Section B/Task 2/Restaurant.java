@@ -18,16 +18,10 @@ public class Restaurant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     int id;
-
-    @Column(name = "name")
+    
     String name;
-
-    @Column(name = "city")
     String city;
-
-    @Column(name = "rating")
     double rating;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
