@@ -1,0 +1,25 @@
+S3 Answer
+
+Having JDBC code directly inside `OrderServlet` creates maintainability and scalability problems. First, the servlet becomes responsible for both handling the request and database operations, so the code becomes difficult to understand and maintain. Second, if many servlets contain similar JDBC connection and SQL code, the same logic gets repeated, making changes and database management difficult.
+
+The DAO pattern solves these problems by keeping all database-related code in a separate `OrderDAO` class. The `OrderServlet` only handles the request and calls methods of the DAO, such as `insertOrder()`. This separates the business/request logic from database logic and reduces duplicate code.
+
+For example:
+
+java
+
+orderDAO.insertOrder(order);
+
+
+The JDBC code remains inside:
+
+java
+OrderDAO
+public void insertOrder(Order order) {
+
+}
+
+
+This structure also makes migration from JDBC to Hibernate easier. If database logic is kept inside the DAO, we mainly need to change the implementation of the DAO from JDBC code to Hibernate code. The servlet can continue calling the same DAO methods without major changes.
+
+In short: DAO improves maintainability by separating database code from the servlet, reduces repeated code, and makes future migration from JDBC to Hibernate easier.

@@ -1,0 +1,42 @@
+ Answer:
+
+I would choose HttpSession to store the user's cart between different pages. It is suitable because the user does not need to log in, and the cart can still be maintained on the server for that user's session. I would avoid URL rewriting as the primary approach because the session information has to be added to every URL, which makes URLs longer and can be difficult to manage when the user visits many pages.
+
+The main `HttpSession` API calls I would use are:
+
+java
+session.setAttribute("cart", cart);
+
+
+Cart cart = (Cart) session.getAttribute("cart");
+
+
+session.removeAttribute("cart");
+
+
+The session can be obtained using:
+
+java
+HttpSession session = request.getSession();
+
+
+So the basic flow is:
+
+
+User adds item
+     ↓
+session.setAttribute()
+     ↓
+User moves to another page
+     ↓
+session.getAttribute()
+     ↓
+Cart is available
+     ↓
+Order placed
+     ↓
+session.removeAttribute()
+
+
+Why HttpSession: It keeps the cart associated with the user's session without requiring login and without putting cart/session data into the URL.
+

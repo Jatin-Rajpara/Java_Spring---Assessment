@@ -1,0 +1,100 @@
+ S 6 — Answer
+
+When a POST request is sent to `/orders/place`, Spring MVC follows a specific request lifecycle.
+
+Request lifecycle:
+
+1. The client (Postman) sends a POST request to:
+
+
+/orders/place
+
+
+2. The request first reaches the DispatcherServlet. It is the front controller of Spring MVC.
+
+3. DispatcherServlet asks HandlerMapping to find which controller and method should handle the requested URL.
+
+4. HandlerMapping checks the `@RequestMapping` annotations of controllers.
+
+5. If a matching controller method is found, DispatcherServlet sends the request to that method.
+
+6. The controller method processes the request and returns a response or view.
+
+The flow is:
+
+Postman
+   ↓
+DispatcherServlet
+   ↓
+HandlerMapping
+   ↓
+Controller Method
+   ↓
+Response
+
+Configuration points to check for 404
+
+1. Component Scanning
+
+I would check whether the controller package is included in Spring's component scanning. If Spring does not scan the package, `@Controller` will not be registered.
+
+
+@ComponentScan("com.jatin")
+
+
+2. DispatcherServlet Mapping
+
+I would check whether `DispatcherServlet` is correctly mapped to receive the requested URL.
+
+For example:
+
+xml
+<servlet-mapping>
+    <servlet-name>spring</servlet-name>
+    <url-pattern>/</url-pattern>
+</servlet-mapping>
+
+
+I would also check that the application is running with the correct context path and that the Postman URL is correct.
+
+Role of HandlerMapping
+
+`HandlerMapping` is responsible for finding the correct controller and controller method** for the incoming URL and HTTP request.
+
+For example:
+
+java
+@Controller
+@RequestMapping("/orders")
+public class OrderController {
+
+    @PostMapping("/place")
+    public String placeOrder() {
+        return "success";
+    }
+}
+
+
+Here, the class-level mapping is:
+
+
+/orders
+
+and the method-level mapping is:
+
+/place
+
+
+Spring combines them:
+
+/orders + /place
+       ↓
+/orders/place
+
+
+So the POST request must be:
+
+POST /orders/place
+
+
+In short: `DispatcherServlet` receives the request, `HandlerMapping` finds the matching controller method, and `@RequestMapping` at class and method level together determine the final URL. A 404 can occur if the controller is not scanned, DispatcherServlet is not correctly mapped, or the requested URL does not match the registered mapping.

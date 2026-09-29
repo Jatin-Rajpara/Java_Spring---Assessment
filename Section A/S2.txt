@@ -1,0 +1,18 @@
+java
+@OneToMany(mappedBy = "restaurant",
+           cascade = CascadeType.ALL,
+           fetch = FetchType.LAZY)
+private List<MenuItem> menuItems;
+
+
+java
+@ManyToOne
+@JoinColumn(name = "restaurant_id")
+private Restaurant restaurant;
+
+
+I would use `CascadeType.ALL` when menu items should be managed along with their restaurant. If a restaurant is deleted, `CascadeType.ALL` will also delete its related menu items.
+
+I would use `FetchType.LAZY` because menu items do not always need to be loaded when the restaurant is loaded. They are loaded only when required. In a Servlet-based application, `LazyInitializationException` can occur if we close the Hibernate session and then try to access the lazy-loaded menu items, because Hibernate can no longer load them from the database.
+
+In short: `@OneToMany` is used for the restaurant-to-menu-items relationship, `CascadeType.ALL` can delete related menu items when the restaurant is deleted, and `FetchType.LAZY` loads menu items only when needed.

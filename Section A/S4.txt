@@ -1,0 +1,42 @@
+S4 Answer
+
+In this situation, creating a new database connection for every HTTP request can cause too many connections when many users access the application at the same time. The Singleton pattern can be used to create one shared database connection manager or, preferably, one shared connection pool for the application.
+
+A basic Singleton structure can be written as:
+
+
+public class DBConnection {
+
+    private static DBConnection obj;
+
+    private DBConnection() {
+    }
+
+    public static DBConnection getInstance() {
+
+        if (obj == null) {
+            obj = new DBConnection();
+        }
+
+        return obj;
+    }
+}
+
+Here, the constructor is `private`, so objects cannot be created directly from outside. The `getInstance()` method returns the same object whenever it is called.
+
+However, a Servlet container is multithreaded, so multiple requests can call `getInstance()` at the same time. If two threads see `obj == null` simultaneously, they may create two objects. This breaks the Singleton rule.
+
+To make it thread-safe, we can use a synchronized method:
+
+public static synchronized DBConnection getInstance() {
+
+    if (obj == null) {
+        obj = new DBConnection();
+    }
+
+    return obj;
+}
+
+In a real application, instead of sharing one actual JDBC `Connection`, it is better to make the Singleton manage a connection pool. The pool can provide connections to requests and reuse them after they are closed, which helps handle many concurrent users without creating unlimited database connections.
+
+In short: Singleton ensures one shared connection manager/pool, thread safety prevents multiple instances from being created, and connection pooling handles concurrent database requests more efficiently.

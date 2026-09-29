@@ -1,0 +1,68 @@
+ Answer:
+
+In the current Servlet-based application, every Servlet creates its own `OrderService` object using `new OrderService()`. If the same code is repeated in six different controllers, it creates duplicate object creation and tightly coupled code. If the `OrderService` class changes or has dependencies, we have to update the code in many places.
+
+Spring's IoC (Inversion of Control) container solves this problem by creating and managing the `OrderService` object. Instead of creating the object manually with `new`, the controller gets the required object from Spring.
+
+For example:
+
+
+@Service
+public class OrderService {
+    
+}
+
+
+And in the controller:
+
+
+@Controller
+public class OrderController {
+
+    @Autowired
+    private OrderService service;
+}
+
+
+Here, Spring creates and manages the `OrderService` object and injects it into the controller.
+
+Setter Injection
+
+In setter injection, the dependency is provided through a setter method.
+
+
+public class OrderController {
+
+    private OrderService service;
+
+    @Autowired
+    public void setService(OrderService service) {
+        this.service = service;
+    }
+}
+
+
+Here, Spring calls the setter method and provides the `OrderService` object.
+
+Constructor Injection
+
+In constructor injection, the dependency is provided through the constructor.
+
+
+public class OrderController {
+
+    private OrderService service;
+
+    @Autowired
+    public OrderController(OrderService service) {
+        this.service = service;
+    }
+}
+
+
+Here, Spring provides the `OrderService` object when it creates the `OrderController`.
+Preference
+
+I would prefer constructor injection because the dependency is provided when the object is created. It makes the dependency clear and ensures that the controller cannot be created without the required `OrderService`.
+
+In short: IoC removes manual object creation, Setter Injection uses a setter method, and Constructor Injection uses a constructor.
